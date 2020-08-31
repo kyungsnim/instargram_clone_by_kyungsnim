@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1051709388970",
+    "firebase_url": "https://social-network-app-422dd.firebaseio.com",
+    "project_id": "social-network-app-422dd",
+    "storage_bucket": "social-network-app-422dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1051709388970:android:b46e5f16bdc06a3e56b8d3",
+        "android_client_info": {
+          "package_name": "com.kyungsnim.instargram_clone_by_kyungsnim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1051709388970-s9v2s78217saqffam07hsurkvt2sp7qp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRjO2OJ4rRZg-qw5oPUQrnhei4QWLFKtE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1051709388970-s9v2s78217saqffam07hsurkvt2sp7qp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
