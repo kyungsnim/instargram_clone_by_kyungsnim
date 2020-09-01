@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instargram_clone_by_kyungsnim/pages/home_page.dart';
+import 'package:instargram_clone_by_kyungsnim/pages/HomePage.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.deepPurpleAccent,
+        scaffoldBackgroundColor: Colors.black,
         dialogBackgroundColor: Colors.deepPurple,
         primaryColor: Colors.grey,
-        cardColor: Colors.white70,
+        cardColor: Colors.black,
         accentColor: Colors.purpleAccent,
       ),
       home: HomePage(),

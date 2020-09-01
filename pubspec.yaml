@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   cloud_firestore:
+  firebase_core:
   image:
   animator:
   image_picker:
@@ -31,7 +32,7 @@ dependencies:
   timeago:
   cached_network_image:
   firebase_auth:
-  geolocator:
+#  geolocator:
   uuid:
   path_provider:
   firebase_messaging:

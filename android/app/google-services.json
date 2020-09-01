@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1051709388970-kfvh53llse7e6at892h67u79lh6ejib6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kyungsnim.instargram_clone_by_kyungsnim",
+            "certificate_hash": "5f9e08b6e01fa0e311be7fcf0bd778712473d090"
+          }
+        },
+        {
           "client_id": "1051709388970-s9v2s78217saqffam07hsurkvt2sp7qp.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -30,6 +38,13 @@
             {
               "client_id": "1051709388970-s9v2s78217saqffam07hsurkvt2sp7qp.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1051709388970-f3dgdi63s9tdfcllrhf1jhthfltg4jjk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kyungsnim.instargramCloneByKyungsnim"
+              }
             }
           ]
         }
