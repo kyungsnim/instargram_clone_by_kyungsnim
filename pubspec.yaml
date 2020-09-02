@@ -27,18 +27,19 @@ dependencies:
   firebase_core:
   image:
   animator:
-  image_picker:
+  image_picker: ^0.6.0+2
   google_sign_in:
   timeago:
   cached_network_image:
   firebase_auth:
-#  geolocator:
+  geolocator: ^6.0.0
   uuid:
   path_provider:
   firebase_messaging:
   firebase_storage:
   flutter_svg:
   cupertino_icons: ^0.1.3
+  permission_handler: ^3.2.0
 
 dev_dependencies:
   flutter_test:

@@ -44,6 +44,7 @@ android {
         targetSdkVersion 29
         multiDexEnabled true
         versionCode flutterVersionCode.toInteger()
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         versionName flutterVersionName
     }
 
@@ -62,5 +63,6 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:multidex:1.0.3'
 }

@@ -14,10 +14,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.black,
-        dialogBackgroundColor: Colors.deepPurple,
+        dialogBackgroundColor: Colors.white,
         primaryColor: Colors.grey,
         cardColor: Colors.black,
-        accentColor: Colors.purpleAccent,
+        accentColor: Colors.white,
       ),
       home: HomePage(),
     );

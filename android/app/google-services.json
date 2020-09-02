@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1051709388970-c45qgeccilueup5pmnup434lejfrs0q7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kyungsnim.instargram_clone_by_kyungsnim",
+            "certificate_hash": "5decb1ccf6b04138a10bad64a6d43c5c11466ad7"
+          }
+        },
+        {
           "client_id": "1051709388970-kfvh53llse7e6at892h67u79lh6ejib6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

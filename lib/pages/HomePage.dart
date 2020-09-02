@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,7 +13,8 @@ import 'package:instargram_clone_by_kyungsnim/pages/CreateAccountPage.dart';
 
 // variable for google sign in (very easy to use)
 final GoogleSignIn googleSignIn = new GoogleSignIn();
-final userReference = Firestore.instance.collection('users');
+// variable for firestore collection 'users'
+final userReference = FirebaseFirestore.instance.collection('users');
 
 final DateTime timestamp = DateTime.now();
 User currentUser;
@@ -24,7 +26,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isSignedIn = false;
-  // bool isSignedIn = true;
   // 페이지 컨트롤
   PageController pageController;
   int getPageIndex = 0;
@@ -32,6 +33,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    Firebase.initializeApp().whenComplete(() {
+      print("completed");
+      setState(() {});
+    });
     pageController = PageController();
 
     // 앱 실행시 구글 사용자의 변경여부를 확인함
@@ -64,13 +69,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   saveUserInfoToFirestore() async {
+    // 현재 구글 로그인된 사용자 정보 가져오기
     final GoogleSignInAccount gCurrentUser = googleSignIn.currentUser;
-    DocumentSnapshot documentSnapshot = await userReference.document(gCurrentUser.id).get();
+    // 해당 유저의 db정보 가져오기
+    DocumentSnapshot documentSnapshot = await userReference.doc(gCurrentUser.id).get();
 
+    // 해당 유저의 db정보가 없다면
     if(!documentSnapshot.exists) {
+      // 유저정보를 셋팅하는 페이지로 이동
       final username = await Navigator.push(context, MaterialPageRoute(builder: (context) => CreateAccountPage()));
 
-      userReference.document(gCurrentUser.id).setData({
+      // 유저정보 셋팅된 값으로 db에 set
+      userReference.doc(gCurrentUser.id).set({
         'id' : gCurrentUser.id,
         'profileName' : gCurrentUser.displayName,
         'username' : username,
@@ -80,9 +90,11 @@ class _HomePageState extends State<HomePage> {
         'timestamp' : timestamp
       });
 
-      documentSnapshot = await userReference.document(gCurrentUser.id).get();
+      // 해당 정보 다시 가져오기
+      documentSnapshot = await userReference.doc(gCurrentUser.id).get();
     }
 
+    // 현재 유저정보에 값 셋팅하기
     currentUser = User.fromDocument(documentSnapshot);
   }
 
@@ -116,7 +128,7 @@ class _HomePageState extends State<HomePage> {
           // 정상 로그인시 홈스크린 보인다.
           TimeLinePage(), // 0번 pageIndex
           SearchPage(), // 1번 pageIndex
-          UploadPage(), // 2번 pageIndex
+          UploadPage(currentUser), // 2번 pageIndex
           NotificationsPage(), // 3번 pageIndex
           ProfilePage(), // 4번 pageIndex
         ],
