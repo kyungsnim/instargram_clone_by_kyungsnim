@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:instargram_clone_by_kyungsnim/pages/HomePage.dart';
 
-void main() {
+void main() async {
   runApp(MyApp());
 }
 

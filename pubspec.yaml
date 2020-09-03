@@ -23,7 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore:
+  cloud_firestore: ^0.14.0+2
   firebase_core:
   image:
   animator:
@@ -39,7 +39,6 @@ dependencies:
   firebase_storage:
   flutter_svg:
   cupertino_icons: ^0.1.3
-  permission_handler: ^3.2.0
 
 dev_dependencies:
   flutter_test:

@@ -10,11 +10,14 @@ import 'package:instargram_clone_by_kyungsnim/pages/ProfilePage.dart';
 import 'package:instargram_clone_by_kyungsnim/pages/UploadPage.dart';
 import 'package:instargram_clone_by_kyungsnim/pages/NotificationsPage.dart';
 import 'package:instargram_clone_by_kyungsnim/pages/CreateAccountPage.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 // variable for google sign in (very easy to use)
 final GoogleSignIn googleSignIn = new GoogleSignIn();
 // variable for firestore collection 'users'
-final userReference = FirebaseFirestore.instance.collection('users');
+final userReference = FirebaseFirestore.instance.collection('users'); // 사용자 정보 저장을 위한 ref
+final StorageReference storageReference = FirebaseStorage.instance.ref().child('Posts Pictures');
+final postsReference = FirebaseFirestore.instance.collection('posts'); // 게시글 정보 저장을 위한 ref
 
 final DateTime timestamp = DateTime.now();
 User currentUser;

@@ -5,6 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:instargram_clone_by_kyungsnim/models/user.dart';
+import 'package:instargram_clone_by_kyungsnim/pages/HomePage.dart';
+import 'package:uuid/uuid.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as ImD;
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:instargram_clone_by_kyungsnim/widgets/ProgressWidget.dart';
 
 class UploadPage extends StatefulWidget {
   final User gCurrentUser;
@@ -13,9 +19,11 @@ class UploadPage extends StatefulWidget {
   _UploadPageState createState() => _UploadPageState();
 }
 
-class _UploadPageState extends State<UploadPage> {
+class _UploadPageState extends State<UploadPage> with AutomaticKeepAliveClientMixin<UploadPage> {
   final ImagePicker _picker = ImagePicker();
-  PickedFile file;
+  File imgFile;
+  bool uploading = false;
+  String postId = Uuid().v4();
   TextEditingController descTextEditingController = TextEditingController();
   TextEditingController locationTextEditingController = TextEditingController();
 
@@ -33,7 +41,7 @@ class _UploadPageState extends State<UploadPage> {
       maxWidth: 970,
     );
     setState(() {
-      this.file = imageFile;
+      this.imgFile = File(imageFile.path);
     });
   }
 
@@ -45,7 +53,7 @@ class _UploadPageState extends State<UploadPage> {
       maxWidth: 970,
     );
     setState(() {
-      this.file = imageFile;
+      this.imgFile = File(imageFile.path);
     });
   }
 
@@ -102,11 +110,13 @@ class _UploadPageState extends State<UploadPage> {
     );
   }
 
-  removeImage() {
+  clearPostInfo() {
+    uploading = false;
+    postId = Uuid().v4();
+    descTextEditingController.clear();
+    locationTextEditingController.clear();
     setState(() {
-      file = null;
-      descTextEditingController.clear();
-      locationTextEditingController.clear();
+      imgFile = null;
     });
   }
 
@@ -124,11 +134,50 @@ class _UploadPageState extends State<UploadPage> {
     print('locationTextEditingController.text : ${locationTextEditingController.text}');
   }
 
+  compressingPhoto() async { // 업로드 전 사진 준비
+    final tDirectory = await getTemporaryDirectory(); // path_provider에서 제공
+    final path = tDirectory.path; // 임시 path를 만들어서
+    ImD.Image mImageFile = ImD.decodeImage(imgFile.readAsBytesSync()); // image file을 읽어서
+    final compressedImageFile = File('$path/img_$postId.jpg')..writeAsBytesSync(ImD.encodeJpg(mImageFile, quality: 90)); // jpg양식의 신규파일로 만듦
+    setState(() {
+      imgFile = compressedImageFile;
+    });
+  }
+
+  controlUploadAndSave() async {
+    setState(() {
+      uploading = true;
+    });
+    await compressingPhoto(); // 업로드 전 사진 준비
+    String downloadUrl = await uploadPhoto(imgFile); // 업로드 후 url 저장
+    savePostInfoToFireStore(url: downloadUrl, location: locationTextEditingController.text, desc: descTextEditingController.text);  // location은 에러나서 잠시 보류
+    clearPostInfo();
+  }
+
+  savePostInfoToFireStore({String url, String location, String desc}) {
+    postsReference.doc(widget.gCurrentUser.id).collection('usersPosts').doc(postId).set({
+      'postId': postId,
+      'ownerId': widget.gCurrentUser.id,
+      'timestamp': timestamp,
+      'likes': {},
+      'username': widget.gCurrentUser.username,
+      'description': desc,
+      'location': location,
+      'url': url
+    });
+  }
+
+  Future<String> uploadPhoto(mImgFile) async {
+    StorageUploadTask storageUploadTask = storageReference.child('post_$postId.jpg').putFile(mImgFile); // 파일명을 지정해서 Storage에 저장
+    StorageTaskSnapshot storageTaskSnapshot = await storageUploadTask.onComplete; // 저장이 완료되면
+    return await storageTaskSnapshot.ref.getDownloadURL(); // 저장된 url값을 return
+  }
+
   displayUploadFormScreen() {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white), onPressed: removeImage,),
+        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.white), onPressed: clearPostInfo,),
         title: Text(
           'New Post',
           style: TextStyle(
@@ -139,7 +188,7 @@ class _UploadPageState extends State<UploadPage> {
         ),
         actions: <Widget>[
           FlatButton(
-            onPressed: () { print('tapped'); },
+            onPressed: () => uploading ? null : controlUploadAndSave(),
             child: Text('Share',
               style: TextStyle(
                 color: Colors.lightGreenAccent,
@@ -152,6 +201,7 @@ class _UploadPageState extends State<UploadPage> {
       ),
       body: ListView(
         children: <Widget>[
+          uploading ? linearProgress() : Text(''),
           Container(
             height: MediaQuery.of(context).size.height * 0.3,
             width: MediaQuery.of(context).size.width * 0.8,
@@ -161,7 +211,7 @@ class _UploadPageState extends State<UploadPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: FileImage(File(file.path)),
+                      image: FileImage(imgFile),
                       fit: BoxFit.cover
                     )
                   ),
@@ -224,7 +274,7 @@ class _UploadPageState extends State<UploadPage> {
               color: Colors. green,
               icon: Icon(Icons.location_on, color: Colors.white),
               label: Text('Get my Current Location', style: TextStyle(color: Colors.white)),
-              onPressed: getUserCurrentLocation,
+              // onPressed: getUserCurrentLocation,
             )
           )
         ],
@@ -232,9 +282,11 @@ class _UploadPageState extends State<UploadPage> {
     );
   }
 
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
     // 카메라 또는 갤러리에서 사진 선택한 후엔 UploadFormScreen으로 보여준다.
-    return file == null ? displayUploadScreen() : displayUploadFormScreen();
+    return imgFile == null ? displayUploadScreen() : displayUploadFormScreen();
   }
 }
