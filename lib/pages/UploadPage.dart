@@ -122,13 +122,13 @@ class _UploadPageState extends State<UploadPage> with AutomaticKeepAliveClientMi
 
   getUserCurrentLocation() async {
     print('여기1');
-    Position position = await getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     print('여기2');
-    // List<Placemark> placeMarks = await Geolocator().placemarkFromCoordinates(position.latitude, position.longitude);
-    // Placemark mPlaceMark = placeMarks[0];
+     List<Placemark> placeMarks = await Geolocator().placemarkFromCoordinates(position.latitude, position.longitude);
+     Placemark mPlaceMark = placeMarks[0];
     print('여기3');
-    // String completeAddressInfo = '${mPlaceMark.subThoroughfare} ${mPlaceMark.thoroughfare}, ${mPlaceMark.subLocality} ${mPlaceMark.locality}, ${mPlaceMark.subAdministrativeArea} ${mPlaceMark.administrativeArea}, ${mPlaceMark.postalCode} ${mPlaceMark.country}';
-    // String specificAddress = '${mPlaceMark.locality}, ${mPlaceMark.country}';
+     String completeAddressInfo = '${mPlaceMark.subThoroughfare} ${mPlaceMark.thoroughfare}, ${mPlaceMark.subLocality} ${mPlaceMark.locality}, ${mPlaceMark.subAdministrativeArea} ${mPlaceMark.administrativeArea}, ${mPlaceMark.postalCode} ${mPlaceMark.country}';
+     String specificAddress = '${mPlaceMark.locality}, ${mPlaceMark.country}';
     print('여기4');
     locationTextEditingController.text = '${position.latitude}';
     print('locationTextEditingController.text : ${locationTextEditingController.text}');

@@ -110,10 +110,6 @@ class _HomePageState extends State<HomePage> {
     googleSignIn.signIn();
   }
 
-  logoutUser() {
-    googleSignIn.signOut();
-  }
-
   whenPageChanges(int pageIndex) {
     setState(() {
       this.getPageIndex = pageIndex;
@@ -133,7 +129,7 @@ class _HomePageState extends State<HomePage> {
           SearchPage(), // 1번 pageIndex
           UploadPage(currentUser), // 2번 pageIndex
           NotificationsPage(), // 3번 pageIndex
-          ProfilePage(), // 4번 pageIndex
+          ProfilePage(currentUser.id), // 4번 pageIndex
         ],
         controller: pageController, // controller를 지정해주면 각 페이지별 인덱스로 컨트롤 가능
         onPageChanged: whenPageChanges, // page가 바뀔때마다 whenPageChanges 함수가 호출되고 현재 pageIndex 업데이트해줌
